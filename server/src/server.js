@@ -50,6 +50,22 @@ app.get("/api/applications", (request, response) => {
   });
 });
 
+app.delete("/api/applications/:id", (request, response) => {
+  const applicationId = request.params.id;
+
+  database.run(
+    "DELETE FROM applications where id = ?",
+    [applicationId],
+    function (error){
+      if (error){
+        return response.status(500).json({ error: "Failed to delete application"
+        })
+        response.json({ message: "Application deleted successfully"});
+      }
+    }
+  )
+})
+
 app.post("/api/applications", (request, response) => {
   const {
     company,
