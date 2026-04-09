@@ -60,8 +60,8 @@ app.delete("/api/applications/:id", (request, response) => {
       if (error){
         return response.status(500).json({ error: "Failed to delete application"
         })
-        response.json({ message: "Application deleted successfully"});
       }
+      response.json({ message: "Application deleted successfully"});
     }
   )
 })
@@ -124,6 +124,22 @@ app.post("/api/applications", (request, response) => {
     );
   });
 });
+
+app.put("/api/applications/:id", (request, response) => {
+  const applicationId = request.params.id;
+  const {status} = request.body;
+
+  database.run(
+    "UPDATE applications SET status = ? WHERE id = ?",
+    [status, applicationId],    
+    function (error){
+      if (error) {
+        return response.status(500).json({error: "Failed to update"})
+      }
+      response.status(200).json({message: "Application updated successfully"})
+    }                                   
+  )
+})
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
